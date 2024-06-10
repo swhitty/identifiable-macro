@@ -55,7 +55,7 @@ extension Item: Identifable {
 }
 ```
 
-A key path must be provided when using multiple associated values:
+A key path to a `Hashable` value must be provided for cases with two or more associated values:
 
 ```swift
 @Identifiable
