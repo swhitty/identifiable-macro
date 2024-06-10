@@ -69,7 +69,7 @@ enum Item {
 }
 ```
 
-This syntesises a nested `ID`:
+Synthesises a nested `ID`:
 
 ```swift
 extension Item: Identifable {
