@@ -49,7 +49,7 @@ extension Item: Identifable {
     switch self {
     case .foo(let f): .foo(f.id)
     case .bar(let b): .bar(b)
-    case .baz: .baz
+    case .baz:        .baz
     }
   }
 }
@@ -58,14 +58,13 @@ extension Item: Identifable {
 A key path must be provided when using multiple associated values:
 
 ```swift
-@Identifiable(id: \.1)
+@Identifiable
 enum Item {
-  case foo(Int, Foo)
-  case bar(Any, Int)
-  @ID(\.id)
-  case baz(Baz)
-  @ID(\.self)
-  case zut
+  @ID(\.1)
+  case foo(Any, Foo)
+  @ID(\.0)
+  case bar(Int, Bar)
+  case baz
 }
 ```
 
@@ -77,16 +76,14 @@ extension Item: Identifable {
   enum ID: Hashable {
     case foo(Foo.ID)
     case bar(Int)
-    case baz(Baz.ID)
-    case zut
+    case baz
   }
 
   var id: ID {
     switch self {
     case .foo(_, let f): .foo(f.id)
-    case .bar(_, let b): .bar(b)
-    case .baz(let b):    .baz(b.id)
-    case .zut:           .zut
+    case .bar(let b, _): .bar(b)
+    case .baz:           .baz
     }
   }
 }
