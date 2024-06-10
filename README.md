@@ -12,7 +12,7 @@
 
 The macro can be installed by using Swift Package Manager.
 
- **Note:** IdentifiableContinuation requires Swift 5.10 on Xcode 15.3+. It runs on iOS 13+, tvOS 13+, macOS 10.15+, Linux and Windows.
+ **Note:** requires Swift 5.10 on Xcode 15.3+. It runs on iOS 13+, tvOS 13+, macOS 10.15+, Linux and Windows.
 To install using Swift Package Manager, add this to the `dependencies:` section in your Package.swift file:
 
 ```swift
