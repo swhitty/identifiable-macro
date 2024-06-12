@@ -6,7 +6,7 @@
 
 # Introduction
 
-**identifiable-macro** is a swift macro that can be applied enums to synthesise [`Identifable`](https://developer.apple.com/documentation/swift/identifiable) conformance creating unique IDs for each case.
+**identifiable-macro** is a swift macro that can be applied enums to synthesise [`Identifiable`](https://developer.apple.com/documentation/swift/identifiable) conformance creating unique IDs for each case.
 
 # Installation
 
