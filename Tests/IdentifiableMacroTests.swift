@@ -68,6 +68,17 @@ final class IdentifiableMacroTests: XCTestCase {
                 .zut(4)
             ]
         )
+
+        XCTAssertEqual(
+            items.map(\.id.description),
+            [
+                "foo(100)",
+                "bar(6)",
+                "baz",
+                "fooBar(300)",
+                "zut(4)"
+            ]
+        )
     }
 
     func testIDWithRedundantSelf() {
@@ -96,7 +107,7 @@ enum ItemA {
     case zut(Date)
 }
 
-@Identifiable(id: \.1)
+@Identifiable(id: \.1, options: .customStringConvertible)
 public enum ItemB {
     case foo(Foo, Int)
 

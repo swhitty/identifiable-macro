@@ -48,6 +48,8 @@ enum IdentifiableMacro: ExtensionMacro {
             throw Invalid("Can only be applied to enum")
         }
 
+        let options = IdentifiableOptions.make(from: node)
+
         let accessControl = declaration.modifiers.compactMap(AccessControl.make).first ?? .internal
 
         let memberList = declaration.memberBlock.members
@@ -55,10 +57,27 @@ enum IdentifiableMacro: ExtensionMacro {
         let cases = try memberList.compactMap { member -> CaseDecl? in
             try CaseDecl.make(from: member, id: id)
         }
-        return [try ExtensionDeclSyntax(#"""
+
+        var idConformance = ["Hashable"]
+        var idDescription = ""
+        if options.contains(.customStringConvertible) {
+            idConformance.append("CustomStringConvertible")
+            idDescription = #"""
+            \#(accessControl.syntax)var description: String {
+                        switch self {
+                            \#(cases.map(\.idDescCaseSyntax).joined(separator: "\n"))
+                        }
+            }
+            """#
+        }
+
+        let identifiableDecl = try ExtensionDeclSyntax(
+            #"""
             extension \#(type.trimmed): Identifiable {
-                \#(raw: accessControl.syntax)enum ID: Hashable {
+                \#(raw: accessControl.syntax)enum ID: \#(raw: idConformance.joined(separator: ", ")) {
                     \#(raw: cases.map(\.idCaseDeclSyntax).joined(separator: "\n"))
+            
+                    \#(raw: idDescription)
                 }
                 \#(raw: accessControl.syntax)var id: ID {
                     switch self {
@@ -66,7 +85,11 @@ enum IdentifiableMacro: ExtensionMacro {
                     }
                 }
             }
-            """#)
+            """#
+        )
+
+        return [
+            identifiableDecl
         ]
     }
 }
@@ -150,8 +173,17 @@ extension CaseDecl {
             var letPattern = Array<String>(repeating: "_", count: associatedTypes.count)
             let varID = String(name.first!)
             letPattern[id.idx] = "let \(varID)"
-            let aaa = letPattern.joined(separator: ", ")
-            return "case .\(name)(\(aaa)): .\(name)(\(id.makeValSyntax(varNamed: varID)))"
+            let val = letPattern.joined(separator: ", ")
+            return "case .\(name)(\(val)): .\(name)(\(id.makeValSyntax(varNamed: varID)))"
+        }
+    }
+
+    var idDescCaseSyntax: String {
+        if id.typeName == nil {
+            return #"case .\#(name): "\#(name)""#
+        } else {
+            let varID = String(name.first!)
+            return #"case .\#(name)(let \#(varID)): "\#(name)(\(\#(varID)))""#
         }
     }
 }
@@ -163,6 +195,16 @@ extension IDDecl {
             return name
         } else {
             return  [name, path].joined(separator: ".")
+        }
+    }
+
+    func makeDescSyntax(varNamed name: String) -> String {
+        if typeName == "String" {
+            return name
+        } else if typeName?.isKnownStringConvertible == true {
+            return #"\(String(\#(name)))"#
+        } else {
+            return #"\(String(describing: \#(name)))"#
         }
     }
 
@@ -238,6 +280,32 @@ extension IDDecl {
     }
 }
 
+struct IdentifiableOptions: OptionSet, Sendable {
+    let rawValue: Int
+    init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+
+    static let customStringConvertible = Self(rawValue: 1 << 0)
+
+    static let `default`: Self = []
+}
+
+extension IdentifiableOptions {
+
+    static func make(from attribute: AttributeSyntax) -> Self {
+        guard 
+            let labelSyntax = attribute.arguments?.as(LabeledExprListSyntax.self),
+            let firstOption = labelSyntax
+                .first(where: { $0.label?.text == "options" })?
+                .expression else {
+            return .default
+        }
+
+        return "\(firstOption)" == ".customStringConvertible" ? .customStringConvertible : .customStringConvertible
+    }
+}
+
 private struct Invalid: Error, CustomStringConvertible {
     var description: String
 
@@ -252,7 +320,16 @@ private extension String {
         return Self.knownHashableScalarTypes.contains(self)
     }
 
-    static let knownHashableScalarTypes: Set<String> = [
+    var isKnownStringConvertible: Bool {
+        // todo: include containers: optional, array, set
+        return Self.knownStringConvertible.contains(self)
+    }
+
+    static let knownHashableScalarTypes: Set<String> = knownStringConvertible.union([
+        "Date"
+    ])
+
+    static let knownStringConvertible: Set<String> = [
         "Bool",
         "UInt8",
         "UInt16",
@@ -269,8 +346,7 @@ private extension String {
         "Float32",
         "Float64",
         "String",
-        "StaticString",
-        "Date"
+        "StaticString"
     ]
 }
 

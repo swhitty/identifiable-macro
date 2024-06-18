@@ -29,14 +29,16 @@
 //  SOFTWARE.
 //
 
-@attached(extension, names: named(id), named(ID), conformances: Identifiable)
+@attached(extension, conformances: Identifiable, names: named(id), named(ID))
 public macro Identifiable<ID: Hashable>(
-    id: KeyPath<AssociatedValue, ID> = \.id
+    id: KeyPath<AssociatedValue, ID> = \.id,
+    options: Options = .default
 ) = #externalMacro(module: "MacroPlugin", type: "IdentifiableMacro")
 
-@attached(extension, names: named(id), named(ID), conformances: Identifiable)
+@attached(extension, conformances: Identifiable, names: named(id), named(ID))
 public macro Identifiable<ID: Hashable>(
-    id: KeyPath<(AssociatedValue, AssociatedValue, AssociatedValue, AssociatedValue), ID>
+    id: KeyPath<(AssociatedValue, AssociatedValue, AssociatedValue, AssociatedValue), ID>,
+    options: Options = .default
 ) = #externalMacro(module: "MacroPlugin", type: "IdentifiableMacro")
 
 @attached(peer)
@@ -51,4 +53,15 @@ public macro ID<Root, ID: Hashable>(_ id: KeyPath<Root, ID>, type: ID.Type) = #e
 // Provides syntax for forming key paths to any associated value
 public struct AssociatedValue: Hashable {
     public var id: AnyHashable { AnyHashable(0) }
+}
+
+public struct Options: OptionSet, Sendable {
+    public let rawValue: Int
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+
+    public static let customStringConvertible = Options(rawValue: 1 << 0)
+
+    public static let `default`: Options = []
 }

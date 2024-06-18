@@ -89,6 +89,36 @@ extension Item: Identifable {
 }
 ```
 
+# Options
+
+Conformance to [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) can also be sythensied on the `ID` via option:
+
+```swift
+@Identifiable(options: .customStringConvertible)
+enum Item {
+  case foo(Foo)
+  case baz
+}
+```
+
+Synthesises a description property:
+
+```swift
+extension Item: Identifable {
+  enum ID: Hashable, CustomStringConvertible {
+    case foo(Foo.ID)
+    case baz
+
+    var description: String {
+      switch self {
+      case .foo(let f): "foo(\(f))"
+      case .baz:        "baz"
+      }
+    }
+  }
+}
+```
+
 # Credits
 
 identifiable-macro is primarily the work of [Simon Whitty](https://github.com/swhitty).
