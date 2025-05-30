@@ -1,4 +1,4 @@
-// swift-tools-version:6.1
+// swift-tools-version:5.10
 
 import PackageDescription
 import CompilerPluginSupport
@@ -15,7 +15,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-syntax.git", from: "601.0.1"),
+        .package(url: "https://github.com/apple/swift-syntax.git", from: "510.0.0"),
     ],
     targets: [
         .target(
@@ -47,7 +47,7 @@ extension Array where Element == SwiftSetting {
     static var upcomingFeatures: [SwiftSetting] {
         [
             .enableUpcomingFeature("ExistentialAny"),
-            .swiftLanguageMode(.v6)
+            .enableExperimentalFeature("StrictConcurrency")
         ]
     }
 }
