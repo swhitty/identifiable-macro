@@ -22,6 +22,20 @@ jobs:
       - name: Gather code coverage
         run: xcrun llvm-cov export -format="lcov" .build/debug/identifiable-macroPackageTests.xctest/Contents/MacOS/identifiable-macroPackageTests -instr-profile .build/debug/codecov/default.profdata > coverage_report.lcov
 
+  xcode_15_4:
+    runs-on: macos-14
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_15.4.app/Contents/Developer
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Version
+        run: swift --version
+      - name: Build
+        run: swift build --build-tests
+      - name: Test
+        run: swift test --skip-build
+
   linux_swift_6_1:
     runs-on: ubuntu-latest
     container: swift:6.1.2
