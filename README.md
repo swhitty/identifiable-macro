@@ -1,8 +1,7 @@
 [![Build](https://github.com/swhitty/identifiable-macro/actions/workflows/build.yml/badge.svg)](https://github.com/swhitty/identifiable-macro/actions/workflows/build.yml)
-[![Platforms](https://img.shields.io/badge/platforms-iOS%20|%20Mac%20|%20tvOS%20|%20Linux%20|%20Windows-lightgray.svg)](https://github.com/swhitty/identifiable-macro/blob/main/Package.swift)
-[![Swift 5.10](https://img.shields.io/badge/swift-5.10-red.svg?style=flat)](https://developer.apple.com/swift)
+[![Platforms](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fswhitty%2Fidentifiable-macro%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/swhitty/identifiable-macro)
+[![Swift 6.1](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fswhitty%2Fidentifiable-macro%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/swhitty/identifiable-macro)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://opensource.org/licenses/MIT)
-[![Twitter](https://img.shields.io/badge/twitter-@simonwhitty-blue.svg)](http://twitter.com/simonwhitty)
 
 # Introduction
 
@@ -16,7 +15,7 @@ The macro can be installed by using Swift Package Manager.
 To install using Swift Package Manager, add this to the `dependencies:` section in your Package.swift file:
 
 ```swift
-.package(url: "https://github.com/swhitty/identifiable-macro.git", .upToNextMajor(from: "0.1.0"))
+.package(url: "https://github.com/swhitty/identifiable-macro.git", .upToNextMajor(from: "0.2.1"))
 ```
 
 # Usage
@@ -84,6 +83,38 @@ extension Item: Identifable {
     case .foo(_, let f): .foo(f.id)
     case .bar(let b, _): .bar(b)
     case .baz:           .baz
+    }
+  }
+}
+```
+
+The key path `\.self` bases the ID on case names only, ignoring associated values:
+
+```swift
+@Identifiable(id: \.self)
+enum Item {
+  case foo(Foo)
+  case bar(Int)
+  case baz
+}
+```
+
+Synthesises a nested `ID`:
+
+```swift
+extension Item: Identifable {
+
+  enum ID: Hashable {
+    case foo
+    case bar
+    case baz
+  }
+
+  var id: ID {
+    switch self {
+    case .foo: .foo
+    case .bar: .bar
+    case .baz: .baz
     }
   }
 }

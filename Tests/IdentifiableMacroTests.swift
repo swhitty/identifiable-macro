@@ -91,9 +91,26 @@ final class IdentifiableMacroTests: XCTestCase {
         XCTAssertEqual(
             items.map(\.id),
             [
-                .foo(Foo(title: "Fish")),
+                .foo,
                 .bar,
                 .foobar(Bar(title: "Chips"))
+            ]
+        )
+    }
+
+    func testIDWithSelf() {
+        let items: [ItemD] = [
+            .foo(Foo(title: "Fish")),
+            .bar(Bar(title: "Chips")),
+            .foobar(Foo(title: "Shrimp"), Bar(title: "MusyPeas"))
+        ]
+
+        XCTAssertEqual(
+            items.map(\.id),
+            [
+                .foo,
+                .bar,
+                .foobar
             ]
         )
     }
@@ -134,6 +151,13 @@ enum ItemC {
 
     @ID(\FooBar.bar.self.self.self, type: Bar.self)
     case foobar(FooBar)
+}
+
+@Identifiable(id: \.self)
+enum ItemD {
+    case foo(Foo)
+    case bar(Bar)
+    case foobar(Foo, Bar)
 }
 
 @Identifiable(id: \.1)

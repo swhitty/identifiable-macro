@@ -267,7 +267,7 @@ extension IDDecl {
         } else if path == "id" || path.hasSuffix(".id") {
             typeName = "\(associatedTypes[idx]).ID"
         } else if path == "self" || path.hasSuffix(".self") {
-            typeName = associatedTypes[idx]
+            typeName = nil
         } else if path.isEmpty {
             if associatedTypes[idx].isKnownNotIdentifiable {
                 path = "self"
