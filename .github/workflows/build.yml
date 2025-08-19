@@ -20,7 +20,7 @@ jobs:
       - name: Test
         run: swift test --skip-build --enable-code-coverage
       - name: Gather code coverage
-        run: xcrun llvm-cov export -format="lcov" .build/debug/identifiable-macroPackageTests.xctest/Contents/MacOS/identifiable-macroPackageTests -instr-profile .build/debug/codecov/default.profdata > coverage_report.lcov
+        run: xcrun llvm-cov export -format="lcov" .build/debug/swift-identifiable-enumPackageTests.xctest/Contents/MacOS/swift-identifiable-enumPackageTests -instr-profile .build/debug/codecov/default.profdata > coverage_report.lcov
 
   xcode_26:
     runs-on: macos-15

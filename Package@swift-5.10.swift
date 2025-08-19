@@ -4,14 +4,14 @@ import PackageDescription
 import CompilerPluginSupport
 
 let package = Package(
-    name: "identifiable-macro",
+    name: "swift-identifiable-enum",
     platforms: [
         .macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS(.v6)
     ],
     products: [
         .library(
-            name: "IdentifiableMacro",
-            targets: ["IdentifiableMacro"]
+            name: "IdentifiableEnum",
+            targets: ["IdentifiableEnum"]
         )
     ],
     dependencies: [
@@ -19,7 +19,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "IdentifiableMacro",
+            name: "IdentifiableEnum",
             dependencies: ["MacroPlugin"],
             path: "Sources",
             swiftSettings: .upcomingFeatures
@@ -34,8 +34,8 @@ let package = Package(
             swiftSettings: .upcomingFeatures
         ),
         .testTarget(
-            name: "IdentifiableMacroTests",
-            dependencies: ["IdentifiableMacro", "MacroPlugin"],
+            name: "IdentifiableEnumTests",
+            dependencies: ["IdentifiableEnum", "MacroPlugin"],
             path: "Tests",
             swiftSettings: .upcomingFeatures
         )

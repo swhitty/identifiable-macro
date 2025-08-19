@@ -5,7 +5,7 @@
 
 # Introduction
 
-**identifiable-macro** is a swift macro that can be applied enums to synthesise [`Identifiable`](https://developer.apple.com/documentation/swift/identifiable) conformance creating unique IDs for each case.
+**swift-identifiable-enum** is a macro that synthesises [`Identifiable`](https://developer.apple.com/documentation/swift/identifiable) conformance for enums creating unique IDs for each case.
 
 # Installation
 
@@ -15,7 +15,7 @@ The macro can be installed by using Swift Package Manager.
 To install using Swift Package Manager, add this to the `dependencies:` section in your Package.swift file:
 
 ```swift
-.package(url: "https://github.com/swhitty/identifiable-macro.git", .upToNextMajor(from: "0.2.1"))
+.package(url: "https://github.com/swhitty/swift-identifiable-enum.git", .upToNextMajor(from: "0.2.1"))
 ```
 
 # Usage
@@ -23,7 +23,7 @@ To install using Swift Package Manager, add this to the `dependencies:` section 
 Annotate an enum declaration with `@Identifiable`:
 
 ```swift
-import IdentifiableMacro
+import IdentifiableEnum
 
 @Identifiable
 enum Item {
@@ -152,6 +152,6 @@ extension Item: Identifable {
 
 # Credits
 
-identifiable-macro is primarily the work of [Simon Whitty](https://github.com/swhitty).
+swift-identifiable-enum is primarily the work of [Simon Whitty](https://github.com/swhitty).
 
-([Full list of contributors](https://github.com/swhitty/identifiable-macro/graphs/contributors))
+([Full list of contributors](https://github.com/swhitty/swift-identifiable-enum/graphs/contributors))

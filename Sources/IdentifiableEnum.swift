@@ -1,6 +1,6 @@
 //
-//  IdentifiableMacro.swift
-//  identifiable-macro
+//  IdentifiableEnum.swift
+//  swift-identifiable-enum
 //
 //  Created by Simon Whitty on 07/06/2024.
 //  Copyright 2024 Simon Whitty
@@ -8,7 +8,7 @@
 //  Distributed under the permissive MIT license
 //  Get the latest version from here:
 //
-//  https://github.com/swhitty/identifiable-macro
+//  https://github.com/swhitty/swift-identifiable-enum
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
